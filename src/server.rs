@@ -9,7 +9,7 @@ use tungstenite::WebSocket;
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 struct ClientId(String);
 
-fn run() {
+pub fn main() {
     let addr = "127.0.0.1:80";
     let server = TcpListener::bind(addr).expect("Failed to bind server");
     println!("Server running @ address: ws://{}", addr);
@@ -48,7 +48,11 @@ fn run() {
                         let msg = websocket.lock().unwrap().read();
                         match msg {
                             Ok(Message::Text(text)) => {
-                                println!("Received from {:?}: {}", client_id, text);
+                                if text == "timeout_trigger" {
+                                    // Ignore `timeout_trigger` messages
+                                    continue;
+                                }
+                                // println!("Received from {:?}: {}", client_id, text);
                                 if let Err(e) = handle_message(&text, &clients, &client_id) {
                                     eprintln!("Error handling message from {:?}: {}", client_id, e);
                                 }
@@ -72,6 +76,7 @@ fn run() {
                 eprintln!("Error accepting connection: {}", e);
             }
         }
+        thread::sleep(::std::time::Duration::from_millis(100));
     }
 }
 
@@ -84,16 +89,20 @@ fn handle_message(
     if parts.len() != 2 {
         return Err("Invalid message format: expected 'target1,target2:message'".to_string());
     }
-
     let targets_str = parts[0].trim();
     let message = parts[1].trim();
     let targets: Vec<&str> = targets_str.split(',').map(|t| t.trim()).collect();
 
-    let client_map = clients.lock().map_err(|_| "Failed to lock client map".to_string())?;
+    let client_map = clients
+        .lock()
+        .map_err(|_| "Failed to lock client map".to_string())?;
     for target in targets {
         if let Some(target_websocket) = client_map.get(&ClientId(target.to_string())) {
-            let mut target_ws = target_websocket.lock().map_err(|_| "Failed to lock target WebSocket".to_string())?;
-            if let Err(e) = target_ws.send(Message::Text(message.into())) {
+            let mut target_ws = target_websocket
+                .lock()
+                .map_err(|_| "Failed to lock target WebSocket".to_string())?;
+            let message_with_sender = format!("{}:{}", _sender_id.0, message);
+            if let Err(e) = target_ws.send(Message::Text(message_with_sender.into())){
                 eprintln!("Error sending message to {:?}: {}", target, e);
             }
         } else {
