@@ -1,4 +1,4 @@
-# WebSocket Communication System in Rust: Asynchronous & Real-Time
+# WebSocket Chat App: Asynchronous & Real-Time
 
 This project implements a complete WebSocket-based communication system in Rust, designed to demonstrate asynchronous, real-time messaging. It includes both a WebSocket server and a client, showcasing Rust's capabilities for building concurrent applications using `tokio` and `tokio-tungstenite`.
 
