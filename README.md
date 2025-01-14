@@ -67,7 +67,7 @@ This project addressed several key challenges in both the server and client comp
     *    [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
 
 ### Running the Server
- Build and run the server: `cargo run -bin server`.
+ Build and run the server: `cargo run --bin server`.
 
 ### Running the Client
  Build and run the client: `cargo run --bin client`.
