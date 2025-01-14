@@ -84,17 +84,6 @@ This project provides key insights into Rust's capabilities for network programm
 *   **Rust-Specific Insights:** The project highlights Rust's ownership model combined with `Arc<Mutex>` for simplifying concurrency management and the effectiveness of `tokio` for asynchronous tasks.
 *   **Challenges Overcome:** The project successfully balances simplicity and performance in the server's broadcast system and coordinates multiple async tasks in the client while avoiding deadlocks or race conditions.
 
-## Future Enhancements
-
-The project has several areas for further development:
-
-### Server
-
-*   **Authentication:** Adding user authentication to create a more secure communication system.
-*   **Message Logging:** Implementing server-side logging of messages for debugging and audit purposes.
-
-### Client
-
 *   **Configurable Parameters:** Allowing users to customize parameters such as server URL and timeout duration through settings.
 *   **Rich User Interface:** Implementing a GUI or TUI to enhance user experience.
 
